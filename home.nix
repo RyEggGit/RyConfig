@@ -41,14 +41,24 @@
     fd
     fzf
     bat
-    tree
+    tree 
+
+    # Build tooling (important for Rust -sys crates)
+    pkg-config
+    zlib
+
+    # Language servers
+    nixd
+    rust-analyzer
+    cargo
   ];
+
 
   # Git config
   programs.git = {
     enable = true;
-    userName = "Ryan Egg";
-    userEmail = "reggens@uwaterloo.ca";
+    settings.user.user = "Ryan Egg";
+    settings.user.email = "reggens@uwaterloo.ca";
   };
 
   # Environment variables
