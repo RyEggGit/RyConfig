@@ -15,7 +15,15 @@
   };
 
   # Neovim Config
-  xdg.confgiFile."nvim/init.lua".source = ./nvim/init.lua;
+  xdg.configFile."nvim/init.lua".source = ./nvim/init.lua;
+
+  programs.neovim = {
+    enable = true;
+
+    plugins = with pkgs.vimPlugins; [
+      nvim-treesitter
+    ];
+  };
 
   # Ghostty config
   xdg.configFile."ghostty/config".text = ''
