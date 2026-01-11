@@ -14,6 +14,9 @@
     enableCompletion = true;
   };
 
+  # Neovim Config
+  xdg.confgiFile."nvim/init.lua".source = ./nvim/init.lua;
+
   # Ghostty config
   xdg.configFile."ghostty/config".text = ''
    font-family = "JetBrains Mono"
@@ -51,6 +54,8 @@
     nixd
     rust-analyzer
     cargo
+    rustc
+    rustfmt
   ];
 
 
@@ -65,5 +70,15 @@
   home.sessionVariables = {
     EDITOR = "nvim";
   };
-}
 
+  # Add local bin to PATH
+  home.file.".zshrc.local".text = ''
+    export PATH="$HOME/.local/bin:$PATH"
+  '';
+  
+  programs.zsh.initExtra = ''
+    # source local overrides
+    [[ -f $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
+  '';
+
+}
