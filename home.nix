@@ -5,8 +5,25 @@
   home.homeDirectory = "/Users/ryegg";
   home.stateVersion = "24.05"; # leave this fixed forever
 
+  targets.darwin = {
+    linkApps.enable = true;
+  };
+
   # Let Home Manager manage itself
   programs.home-manager.enable = true;
+
+  # Terminal - Ghosty
+  programs.ghostty = {
+    enable = true;
+    package = if pkgs.stdenv.isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+    settings = {
+      theme = "Abernathy";
+      background-opacity = 0.90;
+    };
+  };
+  
 
   # Shell
   programs.zsh = {
@@ -17,46 +34,26 @@
   # Neovim Config
   xdg.configFile."nvim/init.lua".source = ./nvim/init.lua;
 
-  programs.neovim = {
-    enable = true;
-
-    plugins = with pkgs.vimPlugins; [
-      nvim-treesitter
-    ];
-  };
-
-  # Ghostty config
-  xdg.configFile."ghostty/config".text = ''
-   font-family = "JetBrains Mono"
-   font-size = 13
-
-   theme = Catppuccin Frappe
-
-
-   cursor-style = block
-   window-padding-x = 8
-   window-padding-y = 8
-
-   keybind = ctrl+shift+c=copy_to_clipboard
-   keybind = ctrl+shift+v=paste_from_clipboard
-  '';
-
   # Prompt
   programs.starship.enable = true;
 
-  # Core CLI tools
   home.packages = with pkgs; [
     git
-    neovim
+    gh
     ripgrep
     fd
     fzf
     bat
-    tree 
+    tree
+    tailscale
+    spotify
+    raycast
+    zed-editor
 
     # Build tooling (important for Rust -sys crates)
     pkg-config
     zlib
+    uv 
 
     # Language servers
     nixd
@@ -64,29 +61,29 @@
     cargo
     rustc
     rustfmt
+    zls
   ];
 
+  # Neovim Config
+  programs.neovim = {
+    enable = true;
+    plugins = with pkgs.vimPlugins; [
+      nvim-treesitter.withAllGrammars
+    ];
+  };
 
   # Git config
   programs.git = {
     enable = true;
-    settings.user.user = "Ryan Egg";
+    settings.user.name = "ryegg";
     settings.user.email = "reggens@uwaterloo.ca";
+    settings.push.autoSetupRemote = true;
+    settings.alias.checkout = "co";
   };
 
   # Environment variables
   home.sessionVariables = {
     EDITOR = "nvim";
   };
-
-  # Add local bin to PATH
-  home.file.".zshrc.local".text = ''
-    export PATH="$HOME/.local/bin:$PATH"
-  '';
-  
-  programs.zsh.initExtra = ''
-    # source local overrides
-    [[ -f $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
-  '';
 
 }

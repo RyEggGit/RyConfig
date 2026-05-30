@@ -13,7 +13,10 @@
   outputs = { nixpkgs, home-manager, ... }:
     let
       system = "aarch64-darwin"; # Mac mini (Apple Silicon)
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import nixpkgs { 
+        inherit system; 
+	config.allowUnfree = true;
+      };
     in {
       homeConfigurations."ryegg" =
         home-manager.lib.homeManagerConfiguration {
