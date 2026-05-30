@@ -5,9 +5,9 @@
   home.homeDirectory = "/Users/ryegg";
   home.stateVersion = "24.05"; # leave this fixed forever
 
-  targets.darwin = {
-    linkApps.enable = true;
-  };
+  # targets.darwin = {
+  #   linkApps.enable = true;
+  # };
 
   # Let Home Manager manage itself
   programs.home-manager.enable = true;
@@ -23,7 +23,6 @@
       background-opacity = 0.90;
     };
   };
-  
 
   # Shell
   programs.zsh = {
@@ -33,6 +32,14 @@
 
   # Neovim Config
   xdg.configFile."nvim/init.lua".source = ./nvim/init.lua;
+
+  # Zed Config 
+  xdg.configFile."zed/settings.json".text = builtins.toJSON {
+    # This is really important since Zed's autoupdater will mess
+    # with Nix's installation and cause broken sym links, etc... 
+    # It was a mess last time :(
+    auto_update = false;  
+  };
 
   # Prompt
   programs.starship.enable = true;
@@ -67,6 +74,8 @@
   # Neovim Config
   programs.neovim = {
     enable = true;
+    withRuby = false;
+    withPython3 = false;
     plugins = with pkgs.vimPlugins; [
       nvim-treesitter.withAllGrammars
     ];
